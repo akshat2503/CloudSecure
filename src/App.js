@@ -27,6 +27,16 @@ function App() {
     });
   }
 
+  const handleDownload = () => {
+    const link = document.createElement('a');
+    link.href = image;
+    link.download = 'QRCode.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+
   return (
     <Box sx={{ display: 'flex', flexDirection: {xs: 'column', md: 'row'}, alignItems: 'center', justifyContent: 'center', minHeight: '100vh', backgroundColor: 'rgb(15, 23, 31)', '& .MuiOutlinedInput-notchedOutline': { borderColor: theme.palette.primary.main } }}>
       <Box sx={{marginRight: {xs: '0', md: '4rem'}, p: {xs: '3rem', md: '0'}}}>
@@ -48,8 +58,7 @@ function App() {
           <Typography variant="h4" sx={{ color: 'white', textAlign: 'center', marginBottom: 2 }}>Scan to visit the URL</Typography>
           {image && <img height="300px" src={`${image}`} alt="QR Code" />}
           {!image && <Box sx={{ height: '300px', color: 'grey', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}><QrCodeScannerIcon sx={{ fontSize: '10rem', mb: 3 }} /><Typography>Generate QR to view</Typography></Box>}
-          {/* <Button variant="contained" sx={{ marginTop: 2 }} {`${image && 'disabled'}`}>Download QR Code</Button> */}
-          <Button variant="contained" sx={{ marginTop: 2 }} disabled={!image}>Download QR Code</Button>
+          <Button variant="contained" sx={{ marginTop: 2 }} disabled={!image} onClick={handleDownload}>Download QR Code</Button>
         </Box>
       </Box>
     </Box>
