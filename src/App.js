@@ -19,13 +19,20 @@ function App() {
 
   const handleURLSubmit = () => {
     const url = document.getElementById('url').value;
-    console.log(url);
-    let call = axios.get(`https://asia-south1-my-storage-backup-429707.cloudfunctions.net/qr-code-generator?url=${url}`);
-    call.then(response => {
-      console.log(response.data);
+    axios.get(`https://asia-south1-my-storage-backup-429707.cloudfunctions.net/qr-code-generator?url=${url}`)
+    .then(response => {
       setImage(response.data);
+    })
+    .catch(error => {
+      console.error(error);
     });
   }
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleURLSubmit();
+    }
+  };
 
   const handleDownload = () => {
     const link = document.createElement('a');
@@ -38,10 +45,10 @@ function App() {
 
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: {xs: 'column', md: 'row'}, alignItems: 'center', justifyContent: 'center', minHeight: '100vh', backgroundColor: 'rgb(15, 23, 31)', '& .MuiOutlinedInput-notchedOutline': { borderColor: theme.palette.primary.main } }}>
-      <Box sx={{marginRight: {xs: '0', md: '4rem'}, p: {xs: '3rem', md: '0'}}}>
+    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'center', justifyContent: 'center', minHeight: '100vh', backgroundColor: 'rgb(15, 23, 31)', '& .MuiOutlinedInput-notchedOutline': { borderColor: theme.palette.primary.main } }}>
+      <Box sx={{ marginRight: { xs: '0', md: '4rem' }, p: { xs: '3rem', md: '0' } }}>
         <Typography variant="h4" sx={{ color: 'white', textAlign: 'center', marginBottom: 2 }}>Cloud QR Code Generator</Typography>
-        <TextField variant="outlined" id='url' value={url} onChange={handleInputChange} placeholder="Enter a URL..." sx={{ width: '100%' }} InputProps={{
+        <TextField variant="outlined" id='url' value={url} onChange={handleInputChange} onKeyPress={handleKeyPress} placeholder="Enter a URL..." sx={{ width: '100%' }} InputProps={{
           startAdornment: (
             <InputAdornment position="start">
               <LinkIcon sx={{ color: 'white' }} />
@@ -53,7 +60,7 @@ function App() {
         }} />
         <Button variant="contained" onClick={handleURLSubmit} sx={{ marginTop: 2 }}>Generate QR Code</Button>
       </Box>
-      <Box sx={{marginLeft: {xs: '0', md: '4rem'}}}>
+      <Box sx={{ marginLeft: { xs: '0', md: '4rem' } }}>
         <Box sx={{ border: '2px solid grey', borderRadius: '15px', padding: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography variant="h4" sx={{ color: 'white', textAlign: 'center', marginBottom: 2 }}>Scan to visit the URL</Typography>
           {image && <img height="300px" src={`${image}`} alt="QR Code" />}
